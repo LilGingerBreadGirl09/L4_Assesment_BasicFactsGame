@@ -30,11 +30,15 @@ mode = "regular"
 rounds_played = 0
 
 #Ask user for number of rounds / infinite mode
-num_rounds = num_check("How many rounds would you like to play? Push <enter> for infinite mode: ")
+num_rounds = num_check("How many rounds would you like to play? Push <enter> for infinite mode: ",exit_code="")
 
-if num_rounds == "infinite":
+if num_rounds == "":
     mode = "infinite"
     num_rounds = 5
+# If users are in infinite mode, increase number of rounds!
+
+if mode == "infinite":
+    num_rounds += 1
 
 #Game loop starts here
 while rounds_played < num_rounds:
@@ -55,6 +59,3 @@ while rounds_played < num_rounds:
     if user_choice == "xxx":
         break
 
-    # If users are in infinite mode, increase number of rounds!
-    if mode == "infinite":
-        num_rounds += 1

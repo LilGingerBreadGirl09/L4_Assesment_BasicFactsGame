@@ -1,56 +1,47 @@
-import math, random
+import random
+import math
 
-level1 = [
-    ["What is 1+1?", 2],
-    ["What is 5-2?", 3],
-    ["What is 6+7?", 13]
-]
-
-score = 0
-
-while True:
-    question, answer = random.choice(level1)
-    user = input(f"{question} = ")
-
-    try:
-        user = int(user)
-        if user == answer:
-            print("That's correct!\n")
-            score += 1
-        else:
-            print("Incorrect!\n")
-
-    except ValueError:
-        if user == "end":
-            print(f"Score: {score}")
-            break
-        else:
-            print("Please answer a number!\n")
+#Question generatorrrr AAAAAAA
+def generate_question():
+    num1 = random.randint(1,50)
+    num2 = random.randint(low,high)
+    operator = random.choice(ops)
+    #The question ig huhu
+    question = f"What is {num1} {operator} {num2}?"
+    #The operations
+    if operator=="+":
+        ans = num1+num2
+    elif operator=="-":
+        ans = num1-num2
+    elif operator=="x":
+        ans = num1*num2
+    else:
+        ans = num1
+        num1 = num1*num2
 
 
-level2 = [
-    ["What is 1+1?", 2],
-    ["What is 5-2?", 3],
-    ["What is 6+7?", 13]
-]
+    return question, ans
 
-score = 0
 
-while True:
-    question, answer = random.choice(level2)
-    user = input(f"{question} = ")
+ops= ["+","-","x","÷"]
+difficulty_list = ["easy", "medium", "hard"]
 
-    try:
-        user = int(user)
-        if user == answer:
-            print("That's correct!\n")
-            score += 1
-        else:
-            print("Incorrect!\n")
+low = 1
+high = None
+user_difficulty = str(input("What is your difficulty?")).strip().lower()
 
-    except ValueError:
-        if user == "end":
-            print(f"Score: {score}")
-            break
-        else:
-            print("Please answer a number!\n")
+if user_difficulty == difficulty_list[0]:
+    high = 20
+    ops = ["+", "-",]
+
+elif user_difficulty == difficulty_list[1]:
+    high = 20
+    ops = ["+", "-",]
+
+else:
+    high = 30
+    ops = ["+", "-", "x", "÷"]
+
+question = generate_question()
+user_ans = input(question[0])
+
