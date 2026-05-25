@@ -25,14 +25,12 @@ def string_checker(question, valid_ans=('yes', 'no')):
         print(error)
         print()
 
-
 #Question generatorrrr AAAAAAA
 def generate_question():
-    num1 = random.randint(10,50)
+    num1 = random.randint(low,high)
     num2 = random.randint(low,high)
     operator = random.choice(ops)
-    #The question ig huhu
-    question = f"What is {num1} {operator} {num2}?"
+
     #The operations
     if operator=="+":
         ans = num1+num2
@@ -44,12 +42,32 @@ def generate_question():
         ans = num1
         num1 = num1*num2
 
+    # The question ig huhu
+    question = f"What is {num1} {operator} {num2}?"
 
     return question, ans
 
+#Integer checker to check if it's a number, and to return the exit code
+def int_check(question, exit_code="xxx"):
+    """Checks users enter an integer more than / equal to 13"""
 
+    error = "Please enter an integer that may be the correct answer(╯°□°）╯︵ ┻━┻"
 
-#Checks if its a question
+    while True:
+        try:
+            response = input(question)
+
+            # If users choice is the exit code, break the loop
+            if response == "xxx":
+                return exit_code
+
+            response = int(response)
+            return response
+
+        except ValueError:
+            print(error)
+
+#Checks if it's a question
 def num_check(question, num_type=int, low=0, exit_code="xxx"):
     error = f"Please enter and integer that's more than {low}! o(≧口≦)o"
 
@@ -69,13 +87,9 @@ def num_check(question, num_type=int, low=0, exit_code="xxx"):
             else:
                 print(error)
 
-        #show eroe if response is no valid
+        #show error if response is no valid
         except ValueError:
             print(error)
-
-
-
-
 
 # Instructions
 def instructions():
@@ -89,6 +103,9 @@ def instructions():
     Medium is Multiplication Division.
     Hard is Basically both Level 1 and 2 combined!
             including all Basic operations!
+     
+    But please do know that you may need 
+    to enter negative answers sometimes!
 
     Choose now many rounds you'd like to play!
     <enter> for infinite mode!
@@ -104,12 +121,14 @@ def instructions():
 
 
 # Main routine
-
 #Quiz variables?
 difficulty_list = ["easy", "medium", "hard"]
 mode = "regular"
 rounds_played = 0
+feedback = ""
 
+quiz_history = []
+all_user_answers = []
 
 print()
 print("🎊🎊WELCOME🎊🎊")
@@ -124,21 +143,22 @@ if want_instructions == "yes":
     instructions()
 
 #Ask and get what lvl of difficulty the want
-user_choice = string_checker("Please choose your difficulty level: ", difficulty_list).strip().lower()
+user_choice = string_checker("Please choose your difficulty level from (e)easy, (m)medium, (h)hard."
+                             " WARNING! There are negative answers included in every lvl!: ", difficulty_list).strip().lower()
 print("You choose: ", user_choice)
 print()
 
 #Ask user for number of rounds / infinite mode
+print()
 num_rounds = num_check("How many rounds would you like to play? Push <enter> for infinite mode: ",
                       exit_code="")
-
-
 
 if num_rounds == "":
     mode = "infinite"
     num_rounds = 5
 
 #Quiz variables again huhu
+quiz_history = []
 ops = ["+", "-", "x", "÷"]
 difficulty_list = ["easy", "medium", "hard"]
 
@@ -161,26 +181,94 @@ else:
     exit_code = "xxx"
 
 #Game loop starts here
+
+#Set correct answers and wrong answers to zero at the start of each round
+correct_user_answers = []
+incorrect_user_answers = []
+
 while rounds_played < num_rounds:
 
     rounds_played += 1
 
-    # Round Headings
+    # Question Headings
     if mode == "infinite":
-        rounds_heading = f"\n♾️♾️♾️ Round {rounds_played} (Infinite Mode)♾️♾️♾️"
+        rounds_heading = f"\n♾️♾️♾️ Question {rounds_played} (Infinite Mode)♾️♾️♾️"
     else:
-        rounds_heading = f"\n💿💿💿 Round {rounds_played} of {num_rounds} 💿💿💿"
+        rounds_heading = f"\n💿💿💿 Question {rounds_played} of {num_rounds} 💿💿💿"
 
     print(rounds_heading)
     print()
 
     question = generate_question()
-    user_answer = input(question[0])
+    user_answer = int_check(question[0])
+
+    #If users enter the exit code, break the loop >:)
+    if user_answer == exit_code:
+        break
 
     # If users are in infinite mode, increase number of rounds!
     if mode == "infinite":
         num_rounds += 1
 
+    #To check if you enter a number of not and shows you the answer
+    if user_answer == question[1]:
+        print(f"✅Correct! The answer is {question[1]}!✅")
+
+
+    elif user_answer != question[1]:
+        print(f"❌Incorrect! The answer is {question[1]}!❌")
+
+    else:
+        print("Please enter a number for goodness sake! ╰（‵□′）╯")
+
     #If users choice is the exit code, break the loop
     if user_answer == "xxx":
         break
+
+    all_user_answers.append(user_answer)
+
+#Game loop ends here
+print()
+print("The END of your Quiz! Yipe! (/≧▽≦)/")
+print()
+
+#Quiz history / Statistics here
+# check users have played at least one round of the quiz
+# before calculating statistics
+
+#Add the round results to the quiz history
+history_feedback = f"Questions {rounds_played}: {feedback}"
+quiz_history.append(history_feedback)
+
+#Add the answers that are correct to the score list
+all_user_answers.append(user_answer)
+
+# if users are in infinite increase number of rounds
+if mode == "infinite":
+    num_rounds += 1
+
+if rounds_played > 0:
+
+    # Game History / Statistics area
+
+    # Calculate statistics
+    all_user_answers.sort()
+    correct_user_answers_score = correct_user_answers
+    incorrect_user_answers_score = incorrect_user_answers
+    average_score = sum(all_user_answers) / len(all_user_answers)
+
+    # Ask if they want to see their quiz history
+    # ask the user if they want instructions (check is they say yes / no)
+    see_quiz_history = string_checker("Do you want to see your Quiz History? (*/ω＼*) ")
+
+    # Display the instructions if the user wants to see them...
+    if see_quiz_history == "yes":
+        for item in quiz_history:
+            print(item)
+
+    # Output the statistics
+    print("\n📊📊📊 Statistics 📊📊📊")
+    print(f"Correct Answers╰(*°▽°*)╯:{correct_user_answers_score} | Worst╰（‵□′）╯:{incorrect_user_answers_score} | Average（*＾-＾*）:{average_score:.2f} ")
+    print()
+    print("I Hope you had fun! Have a lovely day superstar! (❁´◡`❁)")
+
