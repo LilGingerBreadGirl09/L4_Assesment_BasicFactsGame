@@ -49,10 +49,10 @@ def generate_question():
 
 #Integer checker to check if it's a number, and to return the exit code
 #Checks if it's a question
-def int_check(question, exit_code="xxx"):
+def int_check(question,  exit_code="xxx"):
     """Checks users enter an integer and returns items"""
 
-    error = "Please enter an integer that may be the correct answer for goodness sake(╯°□°）╯︵ ┻━┻"
+    error = "Please enter an integer for goodness sake(╯°□°）╯︵ ┻━┻"
 
     while True:
         # Ask the user the question and return a response if
@@ -60,6 +60,7 @@ def int_check(question, exit_code="xxx"):
         response = input(question)
         if response == exit_code:
             return response
+
         try:
             response = int(response)
             return response
@@ -119,19 +120,30 @@ if want_instructions == "yes":
     instructions()
 
 #Ask and get what lvl of difficulty the want
-user_choice = string_checker("Please choose your difficulty level from (e)easy, (m)medium, (h)hard."
-                             " ⚠️WARNING! There are negative answers included in every lvl!⚠️: ", difficulty_list).strip().lower()
+print()
+user_choice = string_checker(
+    """Please choose your difficulty level from (e)easy, (m)medium, (h)hard.
+⚠️WARNING! There are negative answers included in every lvl!⚠️:""", difficulty_list).strip().lower()
 print("You choose: ", user_choice)
 print()
 
 #Ask user for number of rounds / infinite mode
 print()
-num_rounds = int_check("How many rounds would you like to play? Push <enter> for infinite mode: ",
-                      exit_code="")
+while True:
+    num_rounds = int_check("How many rounds would you like to play? Push <enter> for infinite mode: ",
+                          exit_code="")
 
-if num_rounds == "":
-    mode = "infinite"
-    num_rounds = 5
+    if num_rounds == "":
+        mode = "infinite"
+        num_rounds = 5
+        break
+
+    elif num_rounds < 1:
+        print("Please enter an integer for goodness sake(╯°□°）╯︵ ┻━┻")
+
+    else:
+        break
+
 
 #Quiz variables again huhu
 quiz_history = []
@@ -221,7 +233,6 @@ if rounds_played > 0:
     if see_quiz_history == "yes":
         print("🌟✨Quiz History✨🌟")
         for item in quiz_history:
-            print()
             print(item)
         print()
         print(f"Your total ✅Correct Answers✅: {correct_answers} (*^▽^*)")
@@ -232,7 +243,29 @@ if rounds_played > 0:
         print(f"Correct Answers╰(*°▽°*)╯:{correct_answers/num_rounds * 100: .2f}% | Incorrect Answers╰（‵□′）╯:{incorrect_answers/num_rounds * 100: .2f}%")
         print()
 
+    else:
+        print("""You dont wanna see your score? Okay then!
+Fair enough, I dont wanna see how bad I did either...（*゜ー゜*）
+But here's your totals and stats ( •̀ ω •́ )✧""")
+        print()
+        print(f"Your total ✅Correct Answers✅: {correct_answers} (*^▽^*)")
+        print(f"Your total of ❌Wrong Answers❌: {incorrect_answers} `(*>﹏<*)′")
+        print()
+        # Output the statistics
+        print("\n📊📊📊 Statistics 📊📊📊")
+        print(
+            f"Correct Answers╰(*°▽°*)╯:{correct_answers / num_rounds * 100: .2f}% | Incorrect Answers╰（‵□′）╯:{incorrect_answers / num_rounds * 100: .2f}%")
+        print()
+
     print()
-    print("I Hope you had fun! And know how to do math now? (´。＿。｀)"
-          "Have a lovely day superstar! (❁´◡`❁)")
+    print("""I Hope you had fun! And know how to do math now? (´。＿。｀)"
+Have a lovely day superstar! (❁´◡`❁)""")
+
+
+
+
+
+
+
+
 
